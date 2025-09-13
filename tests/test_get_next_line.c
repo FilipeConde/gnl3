@@ -105,6 +105,20 @@ void	should_return_nl_index_0(void)
 	TEST_ASSERT_EQUAL_INT(0, get_nl_char(str));
 }
 
+void	should_return_first_line(void)
+{
+	char	*buffer;
+	char	*str1 = "retorna essa\n";
+	int		fd = open("control.txt", O_RDONLY);
+	char	**str2;
+	fill_buffer(fd, str2);
+	// printf("%s", str);
+	free(str1);
+	free(str2);
+
+	TEST_ASSERT_EQUAL_STRING(str1, str2);
+}
+
 int	main(void)
 {
 	UNITY_BEGIN();
@@ -115,5 +129,9 @@ int	main(void)
 	printf("\n>========> TESTS get_nl_char\n");
 RUN_TEST(should_return_nl_index_3);
 RUN_TEST(should_return_nl_index_0);
+
+	// TESTS fill_buffer
+	printf("\n>========> TESTS fill_buffer\n");
+RUN_TEST(should_return_first_line);
 return UNITY_END();
 }

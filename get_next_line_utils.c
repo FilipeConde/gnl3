@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:41:59 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 15:45:40 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/13 20:21:03 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	get_nl_char(char *str)
 {
 	int	nl_index;
 
+	if (str == NULL)
+		return (-1);
 	nl_index = 0;
 	while (str[nl_index] != '\0' && str[nl_index] != '\n')
 	{
@@ -57,38 +59,38 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		ptr[0] = '\0';
 		return (ptr);
 	}
-	ptr = malloc((s1_size + s2_size + 1) * sizeof(char));
+	ptr = ft_calloc((s1_size + s2_size + 1), sizeof(char));
 	if (!ptr)
 		return (NULL);
-	ft_strlcat(ptr, s1, s1_size + 1);
+	ft_strlcpy(ptr, s1, s1_size + 1);
 	ft_strlcat(ptr, s2, s1_size + s2_size + 1);
 	return (ptr);
 }
 
-// size_t	ft_strlcat(char *dst, const char *src, size_t size)
-// {
-// 	size_t	i;
-// 	size_t	j;
-// 	size_t	expected_len;
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	j;
+	size_t	expected_len;
 
-// 	i = 0;
-// 	j = 0;
-// 	expected_len = ft_strlen(dst) + ft_strlen(src);
-// 	if (size == 0)
-// 		return (ft_strlen(src));
-// 	if (ft_strlen(dst) >= size)
-// 		return (ft_strlen(src) + size);
-// 	while (dst[i] != '\0')
-// 	{
-// 		i++;
-// 	}
-// 	while (src[j] != '\0' && i < size - 1)
-// 	{
-// 		dst[i++] = src[j++];
-// 	}
-// 	dst[i++] = '\0';
-// 	return (expected_len);
-// }
+	i = 0;
+	j = 0;
+	expected_len = ft_strlen(dst) + ft_strlen(src);
+	if (size == 0)
+		return (ft_strlen(src));
+	if (ft_strlen(dst) >= size)
+		return (ft_strlen(src) + size);
+	while (dst[i] != '\0')
+	{
+		i++;
+	}
+	while (src[j] != '\0' && i < size - 1)
+	{
+		dst[i++] = src[j++];
+	}
+	dst[i++] = '\0';
+	return (expected_len);
+}
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
@@ -111,17 +113,26 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*ptr;
+	char	*tmp;
+	size_t	i;
 
 	if (nmemb == 0 || size == 0)
 	{
-		ptr = (void *)malloc(1 * 1);
+		ptr = malloc(0);
 		return (ptr);
 	}
 	if (nmemb > (size_t)(-1) / size)
 		return (NULL);
-	ptr = (void *)malloc(nmemb * size);
+	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
 		return (NULL);
-	ft_memset(ptr, 0, size * nmemb);
+	// ft_memset(ptr, 0, size * nmemb);
+	i = 0;
+	tmp = (char *)ptr;
+	while (i < nmemb * size)
+	{
+		tmp[i] = '\0';
+		i++;
+	}
 	return (ptr);
 }
