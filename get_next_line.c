@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 20:07:10 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/13 20:28:51 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,19 @@ void	fill_buffer(int fd, char **buffer)
 	while (get_nl_char(*buffer) < 0)
 	{
 		bytes_read = read(fd, str_slice, BUFFER_SIZE);
+		if (bytes_read <= 0)
+			break ;
 		str_slice[bytes_read] = '\0';
 		ptr_tmp = ft_strjoin(*buffer, str_slice);
 		free(*buffer);
 		*buffer = ptr_tmp;
-		printf("TESTE01: %s\n", *buffer);
-
-		if (bytes_read <= 0)
-			break ;
 	}
-	// if (bytes_read < BUFFER_SIZE) // Control EOF
-	// 	*buffer = ft_strjoin(*buffer, str_slice);
+	if (bytes_read < 0)
+	{
+		free(*buffer);
+		*buffer = NULL;
+	}
+	free(str_slice);
 }
 
 char	*get_next_line(int fd)
@@ -55,15 +57,15 @@ char	*get_next_line(int fd)
 }
 #include <fcntl.h>
 
-int main(int argc, char *argv[])
+int main() //int argc, char *argv[])
 {
 	char	*str;
 	int		i;
 
 	str = NULL;
-	if (argc != 2)
-		return (0);
-	int	fd = open(argv[1], O_RDONLY);
+	// if (argc != 2)
+	// 	return (0);
+	// int	fd = open(argv[1], O_RDONLY);
 	i = 0;
 	// while (i < 6)
 	// {
@@ -72,7 +74,7 @@ int main(int argc, char *argv[])
 	// 	free(str);
 	// 	i++;
 	// }
-	str = get_next_line(fd);
+	str = get_next_line(42);
 	// printf("%s", str);
 	free(str);
 	return (0);
