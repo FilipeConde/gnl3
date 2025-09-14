@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 23:12:56 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/14 17:07:25 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,21 @@ char	*set_line(char *remain, char *buffer)
 
 	return_ptr = NULL;
 	tmp = NULL;
-	if (get_nl_char(remain) < 0)   // if has no '\n' join all
-	{
-		if (get_nl_char(buffer) >= 0)
-		{
-			tmp = ft_calloc(get_nl_char(buffer) + 2, sizeof(char));
-			ft_strlcpy(tmp, buffer, get_nl_char(buffer) + 1);
-		}
-		return_ptr = ft_strjoin(remain, tmp);
-	}
-	else if (get_nl_char(remain) >= 0)
+	if (!(get_nl_char(remain) < 0))   // if has no '\n' join all
 	{
 		return_ptr = ft_calloc(get_nl_char(remain) + 2, sizeof(char));
 		ft_strlcpy(return_ptr, remain, get_nl_char(remain) + 1);
+		return (return_ptr);
 	}
+	else if (get_nl_char(buffer) >= 0)
+		{
+			tmp = ft_calloc(get_nl_char(buffer) + 2, sizeof(char));
+			ft_strlcpy(tmp, buffer, get_nl_char(buffer) + 2);
+			return_ptr = ft_strjoin(remain, tmp);
+			free(tmp);
+		}
+	else if (ft_strlen(buffer))
+		return_ptr = ft_strjoin(remain, buffer);
 	return (return_ptr);
 }
 
@@ -106,15 +107,15 @@ int main(int argc, char *argv[])
 		return (0);
 	int	fd = open(argv[1], O_RDONLY);
 	i = 0;
-	// while (i < 6)
-	// {
-	// 	str = get_next_line(fd);
-	// 	printf("%s", str);
-	// 	free(str);
-	// 	i++;
-	// }
-	str = get_next_line(fd);
-	printf("SAÍDA GERAL GNL =>> %sX", str);
-	free(str);
+	while (i < 5)
+	{
+		str = get_next_line(fd);
+		printf("%s", str);
+		free(str);
+		i++;
+	}
+	// str = get_next_line(fd);
+	// printf("SAÍDA GERAL GNL =>> %sX", str);
+	// free(str);
 	return (0);
 }
