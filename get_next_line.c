@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 20:28:51 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/13 23:07:46 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,71 @@ void	fill_buffer(int fd, char **buffer)
 	free(str_slice);
 }
 
+char	*set_line(char *remain, char *buffer)
+{
+	char	*return_ptr;
+	char	*tmp;
+
+	return_ptr = NULL;
+	tmp = NULL;
+	if (get_nl_char(remain) < 0)   // if has no '\n' join all
+	{
+		if (get_nl_char(buffer) >= 0)
+		{
+			tmp = ft_calloc(get_nl_char(buffer) + 2, sizeof(char));
+			ft_strlcpy(tmp, buffer, get_nl_char(buffer) + 1);
+		}
+		return_ptr = ft_strjoin(remain, buffer);
+	}
+	else if (get_nl_char(remain) >= 0)
+	{
+		return_ptr = ft_calloc(get_nl_char(remain) + 2, sizeof(char));
+		ft_strlcpy(return_ptr, remain, get_nl_char(remain) + 1);
+	}
+	return (return_ptr);
+}
+
 char	*get_next_line(int fd)
 {
 	char		*buffer;
-	// char		*line;
-	// static char	*remain;
+	char		*line;
+	static char	*remain;
 
 	// fill buffer (deal with reading of file)
 	buffer = ft_calloc(1, 1);
-	fill_buffer(fd, &buffer);
-	printf("TESTE02: %s\n", buffer);
+	// line = ft_calloc(1, 1);
+
+	// check_remain(*remain);
+	if (remain == NULL)
+		remain = ft_calloc(1, 1);
+		
+	if (get_nl_char(remain) < 0)
+		fill_buffer(fd, &buffer);
+	// join with remain and buffer into line
+	line = set_line(remain, buffer);
+	free(buffer);
+	return (line);
+	// return line
+
+
+	// printf("TESTE02: %s\n", buffer);
 	// fill line (start from remain, then with buffer)
 	// check remain (if there is remaining, save here for later)
+	// check_remain(buffer, &remain, &line);
 
-	return ("TESTE");
+	return (line);
 }
 #include <fcntl.h>
 
-int main() //int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	char	*str;
 	int		i;
 
 	str = NULL;
-	// if (argc != 2)
-	// 	return (0);
-	// int	fd = open(argv[1], O_RDONLY);
+	if (argc != 2)
+		return (0);
+	int	fd = open(argv[1], O_RDONLY);
 	i = 0;
 	// while (i < 6)
 	// {
@@ -74,8 +113,8 @@ int main() //int argc, char *argv[])
 	// 	free(str);
 	// 	i++;
 	// }
-	str = get_next_line(42);
-	// printf("%s", str);
+	str = get_next_line(fd);
+	printf("SAÍDA GERAL GNL =>> %sX", str);
 	free(str);
 	return (0);
 }
