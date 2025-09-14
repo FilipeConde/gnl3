@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 23:07:46 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/13 23:12:56 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*set_line(char *remain, char *buffer)
 			tmp = ft_calloc(get_nl_char(buffer) + 2, sizeof(char));
 			ft_strlcpy(tmp, buffer, get_nl_char(buffer) + 1);
 		}
-		return_ptr = ft_strjoin(remain, buffer);
+		return_ptr = ft_strjoin(remain, tmp);
 	}
 	else if (get_nl_char(remain) >= 0)
 	{
