@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/14 23:05:47 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/15 18:19:28 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*set_line(char **remain, char *buffer)
 			free(*remain);
 			*remain = ft_strjoin(buffer + get_nl_char(buffer) + 1, "");
 		}
-	else if (ft_strlen(buffer))
+	else if (ft_strlen(buffer) || ft_strlen(buffer) == 0)
 		return_ptr = ft_strjoin(*remain, buffer);
 	return (return_ptr);
 }
@@ -99,7 +99,10 @@ char	*get_next_line(int fd)
 	if (get_nl_char(remain) < 0)
 		fill_buffer(fd, &buffer);
 	line = set_line(&remain, buffer);
-	free(buffer);
+	if (ft_strlen(remain) > 0 && (ft_strlen(remain) == ft_strlen(line)))
+		free(remain);
+	if (ft_strlen(buffer) > 0)
+		free(buffer);
 	return (line);
 }
 #include <fcntl.h>
