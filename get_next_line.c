@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/14 17:07:25 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/14 21:48:09 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,24 @@ void	fill_buffer(int fd, char **buffer)
 	free(str_slice);
 }
 
+char	*set_remain(char *remain)
+{
+	// cut off beginning of remain
+	char	*tmp;
+	size_t	nl_index;
+	size_t	r_size;
+
+	// nl_index = 0;
+	r_size = (size_t)ft_strlen(remain);
+	nl_index = get_nl_char(remain);
+	tmp = NULL;
+	tmp = ft_calloc(r_size - nl_index, sizeof(char));
+	ft_strlcpy(tmp, (remain + (int)nl_index), r_size - nl_index);
+	free(remain);
+	remain = tmp;
+	return (remain);
+}
+
 char	*set_line(char *remain, char *buffer)
 {
 	char	*return_ptr;
@@ -50,7 +68,8 @@ char	*set_line(char *remain, char *buffer)
 	if (!(get_nl_char(remain) < 0))   // if has no '\n' join all
 	{
 		return_ptr = ft_calloc(get_nl_char(remain) + 2, sizeof(char));
-		ft_strlcpy(return_ptr, remain, get_nl_char(remain) + 1);
+		ft_strlcpy(return_ptr, remain, get_nl_char(remain) + 2);
+		remain = set_remain(remain);
 		return (return_ptr);
 	}
 	else if (get_nl_char(buffer) >= 0)
@@ -59,11 +78,15 @@ char	*set_line(char *remain, char *buffer)
 			ft_strlcpy(tmp, buffer, get_nl_char(buffer) + 2);
 			return_ptr = ft_strjoin(remain, tmp);
 			free(tmp);
+			free(remain);
+			remain = ft_strjoin(buffer + get_nl_char(buffer) + 1, "");
+			
 		}
 	else if (ft_strlen(buffer))
 		return_ptr = ft_strjoin(remain, buffer);
 	return (return_ptr);
 }
+
 
 char	*get_next_line(int fd)
 {
@@ -83,16 +106,8 @@ char	*get_next_line(int fd)
 		fill_buffer(fd, &buffer);
 	// join with remain and buffer into line
 	line = set_line(remain, buffer);
+	// set_remain(&remain);
 	free(buffer);
-	return (line);
-	// return line
-
-
-	// printf("TESTE02: %s\n", buffer);
-	// fill line (start from remain, then with buffer)
-	// check remain (if there is remaining, save here for later)
-	// check_remain(buffer, &remain, &line);
-
 	return (line);
 }
 #include <fcntl.h>
