@@ -6,13 +6,13 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/15 18:19:28 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/15 22:44:09 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	fill_buffer(int fd, char **buffer)
+int	fill_buffer(int fd, char **buffer)
 {
 	char	*str_slice;
 	int		bytes_read;
@@ -32,7 +32,7 @@ void	fill_buffer(int fd, char **buffer)
 		free(*buffer);
 		*buffer = ptr_tmp;
 	}
-	if (bytes_read < 0)
+	if (bytes_read < BUFFER_SIZE)
 	{
 		free(*buffer);
 		*buffer = NULL;
@@ -89,15 +89,15 @@ char	*set_line(char **remain, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	char		*buffer;
+	static char	*buffer;
 	char		*line;
-	static char	*remain;
-
-	buffer = ft_calloc(1, 1);
-	if (remain == NULL)
-		remain = ft_calloc(1, 1);
-	if (get_nl_char(remain) < 0)
-		fill_buffer(fd, &buffer);
+	int			eof;
+	// static char	*remain;
+	eof = 0;
+	if (buffer == NULL)
+		buffer = ft_calloc(1, 1);
+	if (get_nl_char(buffer) < 0)
+		eof = fill_buffer(fd, &buffer);
 	line = set_line(&remain, buffer);
 	if (ft_strlen(remain) > 0 && (ft_strlen(remain) == ft_strlen(line)))
 		free(remain);
