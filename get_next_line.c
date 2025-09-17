@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/16 21:06:19 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/16 21:27:15 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char	*set_line(char **buffer)
 	{
 		return_ptr = ft_calloc(ft_strlen(*buffer) + 1, sizeof(char));
 		ft_strlcpy(return_ptr, *buffer, ft_strlen(*buffer) + 1);
-		*buffer = set_remain(*buffer);
+		free(*buffer);
+		*buffer = NULL;
 	}
 	return (return_ptr);
 }
@@ -93,13 +94,6 @@ char	*get_next_line(int fd)
 	if (get_nl_char(buffer) < 0)
 		eof = fill_buffer(fd, &buffer);
 	line = set_line(&buffer);
-	// if (ft_strlen(remain) > 0 && (ft_strlen(remain) == ft_strlen(line)))
-	// 	free(remain);
-	if (ft_strlen(buffer) == 0)
-	{
-		free(buffer);
-		buffer = ft_calloc(1, 1);
-	}
 	return (line);
 }
 #include <fcntl.h>
@@ -121,8 +115,5 @@ int main(int argc, char *argv[])
 		free(str);
 		i++;
 	}
-	// str = get_next_line(fd);
-	// printf("SAÍDA GERAL GNL =>> %sX", str);
-	// free(str);
 	return (0);
 }
