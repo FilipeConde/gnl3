@@ -6,11 +6,37 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/16 21:27:15 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/17 18:20:48 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*ptr;
+	char	*tmp;
+	size_t	i;
+
+	if (nmemb == 0 || size == 0)
+	{
+		ptr = malloc(0);
+		return (ptr);
+	}
+	if (nmemb > (size_t)(-1) / size)
+		return (NULL);
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	i = 0;
+	tmp = (char *)ptr;
+	while (i < nmemb * size)
+	{
+		tmp[i] = '\0';
+		i++;
+	}
+	return (ptr);
+}
 
 int	fill_buffer(int fd, char **buffer)
 {
@@ -51,7 +77,6 @@ char	*set_remain(char *buffer)
 	nl_index = 0;
 	b_size = (size_t)ft_strlen(buffer);
 	nl_index = get_nl_char(buffer);
-
 	tmp = NULL;
 	tmp = ft_calloc(b_size - nl_index, sizeof(char));
 	ft_strlcpy(tmp, (buffer + (int)nl_index) + 1, b_size - nl_index);
@@ -65,7 +90,7 @@ char	*set_line(char **buffer)
 	char	*return_ptr;
 
 	return_ptr = NULL;
-	if ((get_nl_char(*buffer) >= 0))  // has \n
+	if ((get_nl_char(*buffer) >= 0))
 	{
 		return_ptr = ft_calloc(get_nl_char(*buffer) + 2, sizeof(char));
 		ft_strlcpy(return_ptr, *buffer, get_nl_char(*buffer) + 2);
@@ -81,39 +106,54 @@ char	*set_line(char **buffer)
 	return (return_ptr);
 }
 
-
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*line;
 	int			eof;
-	// static char	*remain;
+
 	eof = 0;
 	if (buffer == NULL)
 		buffer = ft_calloc(1, 1);
 	if (get_nl_char(buffer) < 0)
 		eof = fill_buffer(fd, &buffer);
+	if (eof == 1 && ft_strlen(buffer) == 0)
+		return (NULL);
 	line = set_line(&buffer);
 	return (line);
 }
-#include <fcntl.h>
+// #include <fcntl.h>
 
-int main(int argc, char *argv[])
-{
-	char	*str;
-	int		i;
+// int main(int argc, char *argv[])
+// {
+// 	char	*str;
+// 	int		i;
 
-	str = NULL;
-	if (argc != 2)
-		return (0);
-	int	fd = open(argv[1], O_RDONLY);
-	i = 0;
-	while (i < 5)
-	{
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		i++;
-	}
-	return (0);
-}
+// 	str = NULL;
+// 	if (argc != 2)
+// 		return (0);
+// 	int	fd = open(argv[1], O_RDONLY);
+// 	i = 0;
+// 	while (i < 5)
+// 	{
+// 		str = get_next_line(fd);
+// 		printf("%s", str);
+// 		free(str);
+// 		i++;
+// 	}
+// 	close(fd);
+// 	return (0);
+// }
+
+// int main(void)
+// {
+// 	char	*str;
+
+// 	str = NULL;
+// 	while ((str = get_next_line(0)) != NULL)
+// 	{
+// 		printf("Teste: %s", str);
+// 		free(str);
+// 	}
+// 	return (0);
+// }

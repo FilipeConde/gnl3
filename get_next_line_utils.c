@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:41:59 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 22:52:12 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/17 18:21:03 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	get_nl_char(char *str)
 	else if (str[nl_index] == '\n')
 		return (nl_index);
 	return (-1);
-	
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -108,31 +107,4 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	}
 	dst[i] = '\0';
 	return (src_size);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*ptr;
-	char	*tmp;
-	size_t	i;
-
-	if (nmemb == 0 || size == 0)
-	{
-		ptr = malloc(0);
-		return (ptr);
-	}
-	if (nmemb > (size_t)(-1) / size)
-		return (NULL);
-	ptr = malloc(nmemb * size);
-	if (ptr == NULL)
-		return (NULL);
-	// ft_memset(ptr, 0, size * nmemb);
-	i = 0;
-	tmp = (char *)ptr;
-	while (i < nmemb * size)
-	{
-		tmp[i] = '\0';
-		i++;
-	}
-	return (ptr);
 }
