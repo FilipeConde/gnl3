@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/17 18:20:48 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:45:52 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,11 @@ int	fill_buffer(int fd, char **buffer)
 		free(*buffer);
 		*buffer = ptr_tmp;
 	}
-	if (bytes_read < BUFFER_SIZE)
-		return (1);
 	free(str_slice);
-	return (0);
+	// if (bytes_read < BUFFER_SIZE)
+	// 	return (1);
+	// return (0);
+	return (bytes_read);
 }
 
 char	*set_remain(char *buffer)
@@ -112,17 +113,22 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			eof;
 
-	eof = 0;
+	eof = 1;
 	if (buffer == NULL)
 		buffer = ft_calloc(1, 1);
 	if (get_nl_char(buffer) < 0)
 		eof = fill_buffer(fd, &buffer);
-	if (eof == 1 && ft_strlen(buffer) == 0)
+	if ((eof == 0 && ft_strlen(buffer) == 0) || eof < 0)
+	{
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
+	}
 	line = set_line(&buffer);
 	return (line);
 }
 // #include <fcntl.h>
+// #include <stdio.h>
 
 // int main(int argc, char *argv[])
 // {
