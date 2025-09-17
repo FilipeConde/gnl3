@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 19:19:52 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/13 17:07:49 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/16 19:39:21 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 void	*ft_calloc(size_t nmemb, size_t size);
 
-void	fill_buffer(int fd, char **buffer);
+// void	fill_buffer(int fd, char **buffer);
 
 #endif

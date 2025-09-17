@@ -6,7 +6,7 @@
 /*   By: fconde-p <fconde-p@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 15:42:11 by fconde-p          #+#    #+#             */
-/*   Updated: 2025/09/16 19:29:20 by fconde-p         ###   ########.fr       */
+/*   Updated: 2025/09/16 21:06:19 by fconde-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	fill_buffer(int fd, char **buffer)
 	bytes_read = 0;
 	str_slice = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (str_slice == NULL)
-		return ;
+		return (1);
 	while (get_nl_char(*buffer) < 0)
 	{
 		bytes_read = read(fd, str_slice, BUFFER_SIZE);
@@ -38,22 +38,26 @@ int	fill_buffer(int fd, char **buffer)
 	return (0);
 }
 
-char	*set_remain(char *remain)
+char	*set_remain(char *buffer)
 {
-	// cut off beginning of remain
 	char	*tmp;
 	size_t	nl_index;
-	size_t	r_size;
+	size_t	b_size;
 
-	// nl_index = 0;
-	r_size = (size_t)ft_strlen(remain);
-	nl_index = get_nl_char(remain);
+	if (!buffer)
+		return (NULL);
+	if (ft_strlen(buffer) == 0)
+		return (buffer);
+	nl_index = 0;
+	b_size = (size_t)ft_strlen(buffer);
+	nl_index = get_nl_char(buffer);
+
 	tmp = NULL;
-	tmp = ft_calloc(r_size - nl_index, sizeof(char));
-	ft_strlcpy(tmp, (remain + (int)nl_index) + 1, r_size - nl_index);
-	free(remain);
-	remain = tmp;
-	return (remain);
+	tmp = ft_calloc(b_size - nl_index, sizeof(char));
+	ft_strlcpy(tmp, (buffer + (int)nl_index) + 1, b_size - nl_index);
+	free(buffer);
+	buffer = tmp;
+	return (buffer);
 }
 
 char	*set_line(char **buffer)
@@ -67,10 +71,10 @@ char	*set_line(char **buffer)
 		ft_strlcpy(return_ptr, *buffer, get_nl_char(*buffer) + 2);
 		*buffer = set_remain(*buffer);
 	}
-	else if (get_nl_char(buffer) < 0)
+	else if (get_nl_char(*buffer) < 0)
 	{
 		return_ptr = ft_calloc(ft_strlen(*buffer) + 1, sizeof(char));
-		ft_strlcpy(return_ptr, buffer, ft_strlen(buffer) + 1);
+		ft_strlcpy(return_ptr, *buffer, ft_strlen(*buffer) + 1);
 		*buffer = set_remain(*buffer);
 	}
 	return (return_ptr);
@@ -89,10 +93,13 @@ char	*get_next_line(int fd)
 	if (get_nl_char(buffer) < 0)
 		eof = fill_buffer(fd, &buffer);
 	line = set_line(&buffer);
-	if (ft_strlen(remain) > 0 && (ft_strlen(remain) == ft_strlen(line)))
-		free(remain);
-	if (ft_strlen(buffer) > 0)
+	// if (ft_strlen(remain) > 0 && (ft_strlen(remain) == ft_strlen(line)))
+	// 	free(remain);
+	if (ft_strlen(buffer) == 0)
+	{
 		free(buffer);
+		buffer = ft_calloc(1, 1);
+	}
 	return (line);
 }
 #include <fcntl.h>
